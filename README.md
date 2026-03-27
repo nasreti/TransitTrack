@@ -1,4 +1,5 @@
-# TransTrack.
+# TransTrack. <img width="64" height="64" alt="image" src="https://github.com/user-attachments/assets/7c7ec83a-9110-4030-b570-e40312120828" />
+
 
 A live SkyTrain arrival tracker for Translink trains across Metro Vancouver, built with React and Leaflet.
 
@@ -25,6 +26,8 @@ The interactive map updates at every step of the selection flow:
 - **Departure selected:** the map flies to the chosen station, which is marked with a pulsing filled circle in the line brand color
 - **Destination selected:** a second white marker appears at the destination, and a bright white polyline is drawn over the line path connecting the two stations, representing the exact segment you will be riding
 - **Station dots:** every station on the selected line is rendered as a circle marker; hovering shows the station name in a tooltip styled to match the dark theme
+- 
+<img width="1774" height="699" alt="image" src="https://github.com/user-attachments/assets/205fdc55-f7e2-4204-863a-b6d37b638459" />
 
 All coordinate data uses real world GPS positions for all 52 stations across the three lines, including both Canada Line branches.
 
