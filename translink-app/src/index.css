@@ -1,0 +1,771 @@
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #000d1f;
+  --panel:    #00111a;
+  --surface:  #001a2e;
+  --surface2: #002040;
+  --border:   #0a3055;
+  --text:     #c8ddf0;
+  --muted:    #4a6a8a;
+  --lc:       transparent; /* overridden per selected line */
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ── Split layout ───────────────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Map pane ───────────────────────────────────────────────── */
+.map-pane {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+.sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100vh;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* Colored left stripe — the line's identity running full height */
+.sidebar-stripe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--lc);
+  z-index: 5;
+  transition: background 0.4s ease;
+  pointer-events: none;
+}
+
+/* ── Brand header ───────────────────────────────────────────── */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 22px 18px 26px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.brand-tag {
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.gear-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.2s, background 0.2s;
+}
+.gear-btn:hover { color: var(--text); background: var(--surface2); }
+
+/* ── API drawer ─────────────────────────────────────────────── */
+.api-drawer {
+  padding: 14px 22px 14px 26px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.api-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.api-label a {
+  color: #3a7abf;
+  text-decoration: none;
+  font-size: 0.7rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.api-label a:hover { text-decoration: underline; }
+
+.api-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 8px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.api-input:focus { border-color: var(--lc, #3a7abf); }
+
+.api-note {
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ── Route trail / breadcrumb ───────────────────────────────── */
+.route-trail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 22px 10px 26px;
+  border-bottom: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  border-left-color: var(--lc);
+  background: rgba(255,255,255,0.02);
+  flex-shrink: 0;
+  min-height: 42px;
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  white-space: nowrap;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.back-link:hover { color: var(--text); }
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  overflow: hidden;
+}
+
+.crumb {
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.crumb--line {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.crumb--dest {
+  color: #fff;
+  font-weight: 600;
+}
+
+.crumb-sep {
+  color: var(--border);
+  flex-shrink: 0;
+}
+
+/* ── Sidebar body ───────────────────────────────────────────── */
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* ── Step view ──────────────────────────────────────────────── */
+.step-view {
+  padding: 28px 22px 20px 26px;
+  animation: stepIn 0.2s ease both;
+}
+
+@keyframes stepIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.step-q {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 22px;
+}
+
+/* ── Line list ──────────────────────────────────────────────── */
+.line-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.line-list li + li { border-top: 1px solid var(--border); }
+
+.line-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  padding: 0;
+  background: var(--surface);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.15s;
+  overflow: hidden;
+  min-height: 56px;
+}
+
+.line-row:hover {
+  background: color-mix(in srgb, var(--lc) 12%, var(--surface2));
+}
+
+/* Bold color tab on the left */
+.line-row-pip {
+  width: 6px;
+  align-self: stretch;
+  background: var(--lc);
+  flex-shrink: 0;
+}
+
+.line-row-name {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  padding: 0 12px 0 16px;
+  letter-spacing: -0.01em;
+}
+
+.line-row-arrow {
+  font-size: 1.1rem;
+  color: var(--muted);
+  padding-right: 16px;
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.15s;
+}
+.line-row:hover .line-row-arrow {
+  color: var(--lc);
+  transform: translateX(3px);
+}
+
+/* ── Search input ───────────────────────────────────────────── */
+.search-wrap {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.search-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: 2px solid var(--lc, var(--border));
+  border-radius: 8px 8px 0 0;
+  color: var(--text);
+  padding: 11px 36px 11px 14px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: var(--lc, var(--border)); }
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.search-clear:hover { color: var(--text); }
+
+/* ── Station list ───────────────────────────────────────────── */
+.station-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.station-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 14px 11px 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(10,48,85,0.5);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: padding-left 0.15s;
+}
+
+.station-row:hover {
+  padding-left: 6px;
+  background: rgba(255,255,255,0.02);
+}
+
+.station-row:last-child { border-bottom: none; }
+
+.station-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lc, var(--muted));
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.station-row:hover .station-dot { transform: scale(1.4); }
+
+.station-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.station-arrow {
+  color: var(--muted);
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.15s;
+}
+.station-row:hover .station-arrow {
+  color: var(--lc);
+  transform: translateX(3px);
+}
+
+.no-results {
+  padding: 20px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+/* ── Sidebar footer ─────────────────────────────────────────── */
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 22px 14px 26px;
+  border-top: 1px solid var(--border);
+  font-size: 0.68rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.sidebar-footer a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.sidebar-footer a:hover { color: var(--text); }
+
+/* ── Arrival board — compact sidebar version ────────────────── */
+.arrival-board {
+  background: transparent;
+  border: none;
+  overflow: hidden;
+}
+
+/* Departures heading row */
+.board-label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.board-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.board-updated {
+  font-size: 0.62rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* board-header hidden (handled above in breadcrumb) */
+.board-header { display: none; }
+
+.board-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--line-color, #3a7abf);
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.board-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  gap: 8px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+.retry-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 5px 14px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  margin-top: 4px;
+}
+.retry-btn:hover { border-color: var(--lc); }
+
+/* ── Arrivals list ──────────────────────────────────────────── */
+.arrivals-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.arrival-row {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 14px 0;
+  border-bottom: 1px solid rgba(10,48,85,0.5);
+  transition: background 0.12s;
+}
+
+.arrival-row:hover { background: rgba(255,255,255,0.02); }
+
+.arrival-row.arrival-next {
+  border-left: 3px solid var(--line-color);
+  padding-left: 11px;
+}
+
+.arrival-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.next-label {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--line-color);
+  background: color-mix(in srgb, var(--line-color) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line-color) 30%, transparent);
+  border-radius: 3px;
+  padding: 1px 4px;
+  width: fit-content;
+}
+
+.arrival-minutes {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.arrival-clock {
+  font-size: 0.68rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.arrival-center {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.travel-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.travel-icon { font-size: 0.78rem; }
+
+.travel-duration {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.arrival-arrives {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.arrival-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* Status chips */
+.status-chip, .demo-chip {
+  font-size: 0.62rem;
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 2px 6px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-boarding    { background: #0d3320; color: #4ade80; border: 1px solid #14532d; }
+.status-approaching { background: #3a1200; color: #fb923c; border: 1px solid #7c2d12; }
+.status-ontime      { background: #0f1e30; color: var(--muted); border: 1px solid var(--border); }
+.demo-chip          { background: #0c1a30; color: #60a5fa; border: 1px solid #1e3a60; }
+
+/* ── Board footer ───────────────────────────────────────────── */
+.board-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0;
+  font-size: 0.68rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+
+.refresh-icon { font-size: 0.78rem; }
+
+.refresh-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  padding: 3px 8px;
+  font-family: inherit;
+  font-size: 0.66rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.refresh-btn:hover { color: var(--text); border-color: var(--lc, var(--muted)); }
+
+.board-empty {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+/* ── Leaflet overrides ──────────────────────────────────────── */
+.leaflet-container { background: #000d1f !important; font-family: 'Inter', sans-serif; }
+
+.leaflet-control-attribution {
+  background: rgba(0,12,24,0.85) !important;
+  color: #2a4a6a !important;
+  font-size: 9px !important;
+  border-radius: 4px 0 0 0 !important;
+  padding: 2px 6px !important;
+}
+.leaflet-control-attribution a { color: #3a6a9a !important; }
+
+.leaflet-tooltip {
+  background: rgba(0,16,36,0.95) !important;
+  border: 1px solid #0a3055 !important;
+  color: #c8ddf0 !important;
+  font-size: 0.72rem !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
+  border-radius: 5px !important;
+  padding: 3px 8px !important;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0,0,0,.6) !important;
+}
+.leaflet-tooltip-right::before { border-right-color: #0a3055 !important; }
+.leaflet-tooltip-top::before   { border-top-color: #0a3055 !important; }
+
+.map-tooltip { font-size: 0.78rem !important; font-weight: 600 !important; }
+
+/* ── Map legend ─────────────────────────────────────────────── */
+.metro-map-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.metro-map {
+  width: 100%;
+  height: 100%;
+  background: #000d1f;
+}
+
+.map-legend {
+  position: absolute;
+  bottom: 24px;
+  left: 14px;
+  z-index: 500;
+  background: rgba(0,16,36,0.88);
+  border: 1px solid #0a3055;
+  border-radius: 8px;
+  padding: 9px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: #4a6a8a;
+}
+
+.map-legend-pip {
+  width: 22px;
+  height: 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Mobile — stack vertically ──────────────────────────────── */
+@media (max-width: 680px) {
+  body { overflow: auto; }
+
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 45vh 1fr;
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
+  .map-pane {
+    height: 45vh;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .sidebar {
+    height: auto;
+    overflow: visible;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .sidebar-body {
+    overflow: visible;
+  }
+
+  .arrival-minutes { font-size: 1.3rem; }
+  .step-q          { font-size: 1.35rem; }
+}
