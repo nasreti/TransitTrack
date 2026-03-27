@@ -73,7 +73,7 @@ export default function App() {
           <div className="brand">
             <img src="/translink-logo.png" alt="T" className="brand-logo" />
             <div>
-              <p className="brand-name">TransTrack</p>
+              <p className="brand-name">TransitTrack</p>
               <p className="brand-tag">Stay in the loop</p>
             </div>
           </div>
