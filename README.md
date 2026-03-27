@@ -1,4 +1,5 @@
-# TransTrack. <img width="32" height="32" alt="image" src="https://github.com/user-attachments/assets/7c7ec83a-9110-4030-b570-e40312120828" />
+# TransTrack.  <img width="32" height="32" alt="image" src="https://github.com/user-attachments/assets/7c7ec83a-9110-4030-b570-e40312120828" />
+
 
 
 A live SkyTrain arrival tracker for Translink trains across Metro Vancouver, built with React and Leaflet.
@@ -52,7 +53,7 @@ All coordinate data uses real world GPS positions for all 52 stations across the
 - Translink Open API, optional integration for live departure data
 - Simulated arrival fallback, realistic mock data generated client side so the app works without any credentials
 
-## Getting Started
+## Usage
 
 ```bash
 cd translink-app
