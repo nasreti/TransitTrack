@@ -1,4 +1,4 @@
-# TransTrack — Stay in the loop
+# TransitTrack — Stay in the loop
 
 Real time SkyTrain arrival tracker for Translink trains built with React and Leaflet.
 
