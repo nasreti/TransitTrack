@@ -38,8 +38,6 @@ All coordinate data uses real world GPS positions for all 52 stations across the
 - **Aria labels:** interactive controls include accessible labels on the map container and the settings button
 - **Meaningful alt text:** the Translink logo image uses a descriptive alt attribute
 
-> To further improve SEO, consider adding a meta description and Open Graph tags for title, description, and image in index.html.
-
 ## Tech Stack
 
 - React 18, component based UI with hooks for state and side effects
