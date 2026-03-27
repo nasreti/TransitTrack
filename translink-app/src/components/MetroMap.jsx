@@ -120,6 +120,13 @@ const LINE_COLORS = {
   millennium: '#FFD700',
 };
 
+// Vibrant versions used for the active route highlight
+const LINE_HIGHLIGHT_COLORS = {
+  expo:       '#00AAFF',
+  millennium: '#FFE033',
+  canada:     '#4DE8FF',
+};
+
 const LINE_NAMES = {
   canada:     'Canada Line',
   expo:       'Expo Line',
@@ -181,12 +188,14 @@ function RouteHighlight({ selectedLine, origin, destination }) {
 
   if (coords.length < 2) return null;
 
+  const highlightColor = LINE_HIGHLIGHT_COLORS[selectedLine.id] ?? '#ffffff';
+
   return (
     <Polyline
       positions={coords}
-      color="#ffffff"
+      color={highlightColor}
       weight={7}
-      opacity={0.85}
+      opacity={0.9}
     />
   );
 }
@@ -230,8 +239,8 @@ export default function MetroMap({ selectedLine, origin, destination }) {
               key={`${lineId}-${i}`}
               positions={segment}
               color={color}
-              weight={isSelected ? 6 : 3}
-              opacity={dimmed ? 0.15 : isSelected ? 0.95 : 0.65}
+              weight={isSelected ? 6 : 2.5}
+              opacity={dimmed ? 0.1 : isSelected ? 0.95 : 0.22}
             />
           ));
         })}
@@ -260,16 +269,21 @@ export default function MetroMap({ selectedLine, origin, destination }) {
               <CircleMarker
                 key={station.id}
                 center={pos}
-                radius={isSelected ? 5 : 3}
+                radius={isSelected ? 5 : 2.5}
                 pathOptions={{
                   color:       color,
                   fillColor:   color,
-                  fillOpacity: dimmed ? 0.1 : isSelected ? 0.8 : 0.5,
+                  fillOpacity: dimmed ? 0.08 : isSelected ? 0.9 : 0.15,
                   weight:      isSelected ? 1.5 : 0,
                 }}
               >
                 {isSelected && (
-                  <Tooltip direction="top" offset={[0, -6]}>
+                  <Tooltip
+                    permanent
+                    direction="top"
+                    offset={[0, -7]}
+                    className="station-name-label"
+                  >
                     {station.name}
                   </Tooltip>
                 )}
@@ -303,7 +317,7 @@ export default function MetroMap({ selectedLine, origin, destination }) {
             radius={10}
             pathOptions={{
               color:       '#ffffff',
-              fillColor:   '#ffffff',
+              fillColor:   LINE_HIGHLIGHT_COLORS[selectedLine?.id] ?? '#ffffff',
               fillOpacity: 1,
               weight:      2.5,
             }}

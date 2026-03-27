@@ -438,6 +438,22 @@ body {
 }
 .sidebar-footer a:hover { color: var(--text); }
 
+.footer-github {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  color: var(--muted) !important;
+  transition: color 0.15s !important;
+}
+.footer-github:hover { color: var(--text) !important; }
+
+.github-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
 /* ── Arrival board — compact sidebar version ────────────────── */
 .arrival-board {
   background: transparent;
@@ -686,6 +702,23 @@ body {
 .leaflet-tooltip-top::before   { border-top-color: #0a3055 !important; }
 
 .map-tooltip { font-size: 0.78rem !important; font-weight: 600 !important; }
+
+/* Always-visible station name labels on the selected line */
+.station-name-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: rgba(255,255,255,0.75) !important;
+  font-size: 0.62rem !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+  padding: 0 !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.8) !important;
+  pointer-events: none;
+}
+
+.station-name-label::before { display: none !important; }
 
 /* ── Map legend ─────────────────────────────────────────────── */
 .metro-map-wrap {
