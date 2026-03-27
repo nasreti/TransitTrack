@@ -53,7 +53,7 @@ All coordinate data uses real world GPS positions for all 52 stations across the
 - Translink Open API, optional integration for live departure data
 - Simulated arrival fallback, realistic mock data generated client side so the app works without any credentials
 
-## Getting Started
+## Usage
 
 ```bash
 cd translink-app
