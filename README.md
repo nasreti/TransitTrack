@@ -1,4 +1,4 @@
-# TransTrack. <img width="64" height="64" alt="image" src="https://github.com/user-attachments/assets/7c7ec83a-9110-4030-b570-e40312120828" />
+# TransTrack. <img width="32" height="32" alt="image" src="https://github.com/user-attachments/assets/7c7ec83a-9110-4030-b570-e40312120828" />
 
 
 A live SkyTrain arrival tracker for Translink trains across Metro Vancouver, built with React and Leaflet.
