@@ -2,16 +2,11 @@ import { getStationIndex, STATIONS } from '../data/transitData.js';
 
 const API_BASE = 'https://api.translink.ca/rttiapi/v1';
 
-/**
- * Fetch real next-train arrivals from the Translink Open API.
- * Falls back to mock data if no API key is provided or the call fails.
- */
 export async function fetchArrivals({ lineId, originId, destinationId, apiKey }) {
   if (apiKey && apiKey.trim().length > 0) {
     try {
       return await fetchFromApi({ lineId, originId, destinationId, apiKey });
     } catch {
-      // Fall through to mock data
     }
   }
   return generateMockArrivals({ lineId, originId, destinationId });

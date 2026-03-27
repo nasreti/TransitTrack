@@ -6,13 +6,13 @@ import { LINES, getStationsForLine, getDestinations } from './data/transitData.j
 const STEP = { LINE: 0, ORIGIN: 1, DESTINATION: 2, RESULTS: 3 };
 
 export default function App() {
-  const [step, setStep]               = useState(STEP.LINE);
+  const [step, setStep]                 = useState(STEP.LINE);
   const [selectedLine, setSelectedLine] = useState(null);
-  const [origin, setOrigin]           = useState(null);
-  const [destination, setDestination] = useState(null);
-  const [filter, setFilter]           = useState('');
-  const [apiKey, setApiKey]           = useState('');
-  const [showApiKey, setShowApiKey]   = useState(false);
+  const [origin, setOrigin]             = useState(null);
+  const [destination, setDestination]   = useState(null);
+  const [filter, setFilter]             = useState('');
+  const [apiKey, setApiKey]             = useState('');
+  const [showApiKey, setShowApiKey]     = useState(false);
 
   const goBack = () => {
     setFilter('');
@@ -40,10 +40,10 @@ export default function App() {
     setStep(STEP.RESULTS);
   };
 
-  const allStations   = selectedLine ? getStationsForLine(selectedLine.id) : [];
-  const allDests      = (selectedLine && origin) ? getDestinations(selectedLine.id, origin.id) : [];
+  const allStations = selectedLine ? getStationsForLine(selectedLine.id) : [];
+  const allDests    = (selectedLine && origin) ? getDestinations(selectedLine.id, origin.id) : [];
 
-  const stations  = useMemo(() =>
+  const stations = useMemo(() =>
     allStations.filter((s) => s.name.toLowerCase().includes(filter.toLowerCase())),
     [allStations, filter]
   );
@@ -56,19 +56,13 @@ export default function App() {
 
   return (
     <div className="layout">
-
-      {/* ── Map (left) ───────────────────────────────────────── */}
       <div className="map-pane">
         <MetroMap selectedLine={selectedLine} origin={origin} destination={destination} />
       </div>
 
-      {/* ── Sidebar (right) ──────────────────────────────────── */}
       <aside className="sidebar" style={lc ? { '--lc': lc } : {}}>
-
-        {/* Colored line accent running full height */}
         <div className="sidebar-stripe" />
 
-        {/* ── Brand header ──────────────────────────────────── */}
         <header className="sidebar-header">
           <div className="brand">
             <img src="/translink-logo.png" alt="T" className="brand-logo" />
@@ -105,7 +99,6 @@ export default function App() {
           </div>
         )}
 
-        {/* ── Route breadcrumb ──────────────────────────────── */}
         {selectedLine && (
           <div className="route-trail" style={{ borderColor: lc }}>
             {step > STEP.LINE && (
@@ -131,10 +124,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ── Step body ─────────────────────────────────────── */}
         <div className="sidebar-body">
-
-          {/* STEP 0 — Line selection */}
           {step === STEP.LINE && (
             <div className="step-view" key="line">
               <h2 className="step-q">Which line<br/>are you taking?</h2>
@@ -156,7 +146,6 @@ export default function App() {
             </div>
           )}
 
-          {/* STEP 1 — Origin */}
           {step === STEP.ORIGIN && selectedLine && (
             <div className="step-view" key="origin">
               <h2 className="step-q">Departing<br/>from?</h2>
@@ -195,7 +184,6 @@ export default function App() {
             </div>
           )}
 
-          {/* STEP 2 — Destination */}
           {step === STEP.DESTINATION && selectedLine && origin && (
             <div className="step-view" key="destination">
               <h2 className="step-q">Going<br/>to?</h2>
@@ -234,7 +222,6 @@ export default function App() {
             </div>
           )}
 
-          {/* STEP 3 — Results */}
           {step === STEP.RESULTS && selectedLine && origin && destination && (
             <div className="step-view" key="results">
               <ArrivalBoard
@@ -245,10 +232,8 @@ export default function App() {
               />
             </div>
           )}
-
         </div>
 
-        {/* ── Footer ────────────────────────────────────────── */}
         <footer className="sidebar-footer">
           <a href="https://www.translink.ca" target="_blank" rel="noreferrer">Translink</a>
           <span>·</span>

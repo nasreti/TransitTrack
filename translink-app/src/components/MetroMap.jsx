@@ -10,9 +10,7 @@ import {
 import 'leaflet/dist/leaflet.css';
 import { STATIONS } from '../data/transitData.js';
 
-// ── Real-world station coordinates [lat, lng] ─────────────────
 const LL = {
-  // Canada Line
   'waterfront-canada':          [49.2847, -123.1113],
   'vancouver-city-centre':      [49.2797, -123.1167],
   'yaletown':                   [49.2739, -123.1215],
@@ -28,8 +26,6 @@ const LL = {
   'richmond-brighouse':         [49.1668, -123.1390],
   'sea-island-centre':          [49.1960, -123.1532],
   'yvr-airport':                [49.1940, -123.1841],
-
-  // Expo Line
   'waterfront':                 [49.2847, -123.1113],
   'burrard':                    [49.2864, -123.1203],
   'granville':                  [49.2831, -123.1177],
@@ -50,8 +46,6 @@ const LL = {
   'gateway':                    [49.1884, -122.8989],
   'surrey-central':             [49.1891, -122.8456],
   'king-george':                [49.1827, -122.8456],
-
-  // Millennium Line
   'vcc-clark':                  [49.2639, -123.0694],
   'commercial-broadway':        [49.2627, -123.0695],
   'renfrew':                    [49.2628, -123.0426],
@@ -71,22 +65,18 @@ const LL = {
   'lafarge':                    [49.2558, -122.7958],
 };
 
-// ── Polyline paths for each line (Canada has 3 segments for branches) ──
 const LINE_PATHS = {
   canada: [
-    // Main line: Waterfront → Bridgeport
     [
       [49.2847, -123.1113], [49.2797, -123.1167], [49.2739, -123.1215],
       [49.2674, -123.1100], [49.2634, -123.1163], [49.2488, -123.1163],
       [49.2332, -123.1163], [49.2229, -123.1163], [49.2097, -123.1163],
       [49.1951, -123.1163],
     ],
-    // Richmond branch: Bridgeport → Richmond-Brighouse
     [
       [49.1951, -123.1163], [49.1831, -123.1322], [49.1748, -123.1390],
       [49.1668, -123.1390],
     ],
-    // YVR branch: Bridgeport → YVR-Airport
     [
       [49.1951, -123.1163], [49.1960, -123.1532], [49.1940, -123.1841],
     ],
@@ -120,7 +110,6 @@ const LINE_COLORS = {
   millennium: '#FFD700',
 };
 
-// Vibrant versions used for the active route highlight
 const LINE_HIGHLIGHT_COLORS = {
   expo:       '#00AAFF',
   millennium: '#FFE033',
@@ -133,13 +122,11 @@ const LINE_NAMES = {
   millennium: 'Millennium Line',
 };
 
-// Default metro bounds — shows all three lines
 const METRO_BOUNDS = [
   [49.155, -123.20],
   [49.30,  -122.76],
 ];
 
-// ── Child component: adjusts map view as selection changes ─────
 function MapController({ selectedLine, origin, destination }) {
   const map = useMap();
 
@@ -171,7 +158,6 @@ function MapController({ selectedLine, origin, destination }) {
   return null;
 }
 
-// ── Route highlight between origin and destination ─────────────
 function RouteHighlight({ selectedLine, origin, destination }) {
   if (!selectedLine || !origin || !destination) return null;
 
@@ -200,7 +186,6 @@ function RouteHighlight({ selectedLine, origin, destination }) {
   );
 }
 
-// ── Main component ─────────────────────────────────────────────
 export default function MetroMap({ selectedLine, origin, destination }) {
   const lineIds = ['expo', 'millennium', 'canada'];
 
@@ -214,7 +199,6 @@ export default function MetroMap({ selectedLine, origin, destination }) {
         attributionControl={true}
         style={{ height: '100%', width: '100%' }}
       >
-        {/* Dark map tiles — no API key required */}
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>'
@@ -228,11 +212,10 @@ export default function MetroMap({ selectedLine, origin, destination }) {
           destination={destination}
         />
 
-        {/* ── Transit lines ─────────────────────────────────── */}
         {lineIds.map((lineId) => {
           const isSelected = selectedLine?.id === lineId;
-          const dimmed    = selectedLine && !isSelected;
-          const color     = LINE_COLORS[lineId];
+          const dimmed     = selectedLine && !isSelected;
+          const color      = LINE_COLORS[lineId];
 
           return LINE_PATHS[lineId].map((segment, i) => (
             <Polyline
@@ -245,18 +228,16 @@ export default function MetroMap({ selectedLine, origin, destination }) {
           ));
         })}
 
-        {/* ── Route segment highlight ───────────────────────── */}
         <RouteHighlight
           selectedLine={selectedLine}
           origin={origin}
           destination={destination}
         />
 
-        {/* ── Station dots ──────────────────────────────────── */}
         {lineIds.map((lineId) => {
           const isSelected = selectedLine?.id === lineId;
-          const dimmed    = selectedLine && !isSelected;
-          const color     = LINE_COLORS[lineId];
+          const dimmed     = selectedLine && !isSelected;
+          const color      = LINE_COLORS[lineId];
 
           return STATIONS[lineId].map((station) => {
             const pos = LL[station.id];
@@ -292,7 +273,6 @@ export default function MetroMap({ selectedLine, origin, destination }) {
           });
         })}
 
-        {/* ── Origin marker ─────────────────────────────────── */}
         {origin && LL[origin.id] && (
           <CircleMarker
             center={LL[origin.id]}
@@ -310,7 +290,6 @@ export default function MetroMap({ selectedLine, origin, destination }) {
           </CircleMarker>
         )}
 
-        {/* ── Destination marker ────────────────────────────── */}
         {destination && LL[destination.id] && (
           <CircleMarker
             center={LL[destination.id]}
@@ -329,7 +308,6 @@ export default function MetroMap({ selectedLine, origin, destination }) {
         )}
       </MapContainer>
 
-      {/* ── Legend overlay ────────────────────────────────── */}
       <div className="map-legend">
         {lineIds.map((id) => (
           <div key={id} className="map-legend-item">
