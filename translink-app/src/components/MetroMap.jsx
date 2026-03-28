@@ -127,6 +127,11 @@ const METRO_BOUNDS = [
   [49.30,  -122.76],
 ];
 
+const BC_BOUNDS = [
+  [48.2, -139.1],
+  [60.0, -114.0],
+];
+
 function MapController({ selectedLine, origin, destination }) {
   const map = useMap();
 
@@ -197,6 +202,9 @@ export default function MetroMap({ selectedLine, origin, destination }) {
         zoomControl={true}
         scrollWheelZoom={true}
         attributionControl={true}
+        minZoom={7}
+        maxBounds={BC_BOUNDS}
+        maxBoundsViscosity={1.0}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
