@@ -41,7 +41,6 @@ export default function ArrivalBoard({ line, origin, destination, apiKey }) {
   return (
     <div className="arrival-board" style={{ '--line-color': line.color }}>
 
-      {/* Departures label */}
       <div className="board-label-row">
         <span className="board-label">Departures</span>
         {lastUpdated && (

@@ -1,4 +1,3 @@
-/* ── Reset ────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -9,7 +8,7 @@
   --border:   #0a3055;
   --text:     #c8ddf0;
   --muted:    #4a6a8a;
-  --lc:       transparent; /* overridden per selected line */
+  --lc:       transparent;
 }
 
 html, body { height: 100%; }
@@ -22,7 +21,6 @@ body {
   overflow: hidden;
 }
 
-/* ── Split layout ───────────────────────────────────────────── */
 .layout {
   display: grid;
   grid-template-columns: 1fr 400px;
@@ -30,14 +28,12 @@ body {
   overflow: hidden;
 }
 
-/* ── Map pane ───────────────────────────────────────────────── */
 .map-pane {
   position: relative;
   overflow: hidden;
   height: 100vh;
 }
 
-/* ── Sidebar ────────────────────────────────────────────────── */
 .sidebar {
   position: relative;
   display: flex;
@@ -51,7 +47,6 @@ body {
   scrollbar-color: var(--border) transparent;
 }
 
-/* Colored left stripe — the line's identity running full height */
 .sidebar-stripe {
   position: absolute;
   top: 0;
@@ -64,7 +59,6 @@ body {
   pointer-events: none;
 }
 
-/* ── Brand header ───────────────────────────────────────────── */
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -117,7 +111,6 @@ body {
 }
 .gear-btn:hover { color: var(--text); background: var(--surface2); }
 
-/* ── API drawer ─────────────────────────────────────────────── */
 .api-drawer {
   padding: 14px 22px 14px 26px;
   border-bottom: 1px solid var(--border);
@@ -165,7 +158,6 @@ body {
   margin-top: 6px;
 }
 
-/* ── Route trail / breadcrumb ───────────────────────────────── */
 .route-trail {
   display: flex;
   align-items: center;
@@ -223,18 +215,12 @@ body {
 .crumb-sep {
   color: var(--border);
   flex-shrink: 0;
-}
-
-/* ── Sidebar body ───────────────────────────────────────────── */
-.sidebar-body {
+}.sidebar-body {
   flex: 1;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
-}
-
-/* ── Step view ──────────────────────────────────────────────── */
-.step-view {
+}.step-view {
   padding: 28px 22px 20px 26px;
   animation: stepIn 0.2s ease both;
 }
@@ -251,10 +237,7 @@ body {
   letter-spacing: -0.04em;
   line-height: 1.1;
   margin-bottom: 22px;
-}
-
-/* ── Line list ──────────────────────────────────────────────── */
-.line-list {
+}.line-list {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -284,10 +267,7 @@ body {
 
 .line-row:hover {
   background: color-mix(in srgb, var(--lc) 12%, var(--surface2));
-}
-
-/* Bold color tab on the left */
-.line-row-pip {
+}.line-row-pip {
   width: 6px;
   align-self: stretch;
   background: var(--lc);
@@ -313,10 +293,7 @@ body {
 .line-row:hover .line-row-arrow {
   color: var(--lc);
   transform: translateX(3px);
-}
-
-/* ── Search input ───────────────────────────────────────────── */
-.search-wrap {
+}.search-wrap {
   position: relative;
   margin-bottom: 12px;
 }
@@ -352,10 +329,7 @@ body {
   line-height: 1;
   transition: color 0.15s;
 }
-.search-clear:hover { color: var(--text); }
-
-/* ── Station list ───────────────────────────────────────────── */
-.station-list {
+.search-clear:hover { color: var(--text); }.station-list {
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -417,10 +391,7 @@ body {
   color: var(--muted);
   font-size: 0.82rem;
   text-align: center;
-}
-
-/* ── Sidebar footer ─────────────────────────────────────────── */
-.sidebar-footer {
+}.sidebar-footer {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -452,17 +423,11 @@ body {
   width: 13px;
   height: 13px;
   flex-shrink: 0;
-}
-
-/* ── Arrival board — compact sidebar version ────────────────── */
-.arrival-board {
+}.arrival-board {
   background: transparent;
   border: none;
   overflow: hidden;
-}
-
-/* Departures heading row */
-.board-label-row {
+}.board-label-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -483,10 +448,7 @@ body {
   font-size: 0.62rem;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
-}
-
-/* board-header hidden (handled above in breadcrumb) */
-.board-header { display: none; }
+}.board-header { display: none; }
 
 .board-loading {
   display: flex;
@@ -532,10 +494,7 @@ body {
   transition: border-color 0.2s;
   margin-top: 4px;
 }
-.retry-btn:hover { border-color: var(--lc); }
-
-/* ── Arrivals list ──────────────────────────────────────────── */
-.arrivals-list {
+.retry-btn:hover { border-color: var(--lc); }.arrivals-list {
   display: flex;
   flex-direction: column;
 }
@@ -621,10 +580,7 @@ body {
   flex-direction: column;
   align-items: flex-end;
   gap: 4px;
-}
-
-/* Status chips */
-.status-chip, .demo-chip {
+}.status-chip, .demo-chip {
   font-size: 0.62rem;
   font-weight: 700;
   border-radius: 3px;
@@ -637,10 +593,7 @@ body {
 .status-boarding    { background: #0d3320; color: #4ade80; border: 1px solid #14532d; }
 .status-approaching { background: #3a1200; color: #fb923c; border: 1px solid #7c2d12; }
 .status-ontime      { background: #0f1e30; color: var(--muted); border: 1px solid var(--border); }
-.demo-chip          { background: #0c1a30; color: #60a5fa; border: 1px solid #1e3a60; }
-
-/* ── Board footer ───────────────────────────────────────────── */
-.board-footer {
+.demo-chip          { background: #0c1a30; color: #60a5fa; border: 1px solid #1e3a60; }.board-footer {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -672,10 +625,7 @@ body {
   text-align: center;
   color: var(--muted);
   font-size: 0.82rem;
-}
-
-/* ── Leaflet overrides ──────────────────────────────────────── */
-.leaflet-container { background: #000d1f !important; font-family: 'Inter', sans-serif; }
+}.leaflet-container { background: #000d1f !important; font-family: 'Inter', sans-serif; }
 
 .leaflet-control-attribution {
   background: rgba(0,12,24,0.85) !important;
@@ -701,10 +651,7 @@ body {
 .leaflet-tooltip-right::before { border-right-color: #0a3055 !important; }
 .leaflet-tooltip-top::before   { border-top-color: #0a3055 !important; }
 
-.map-tooltip { font-size: 0.78rem !important; font-weight: 600 !important; }
-
-/* Always-visible station name labels on the selected line */
-.station-name-label {
+.map-tooltip { font-size: 0.78rem !important; font-weight: 600 !important; }.station-name-label {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -718,10 +665,7 @@ body {
   pointer-events: none;
 }
 
-.station-name-label::before { display: none !important; }
-
-/* ── Map legend ─────────────────────────────────────────────── */
-.metro-map-wrap {
+.station-name-label::before { display: none !important; }.metro-map-wrap {
   position: relative;
   width: 100%;
   height: 100%;
@@ -762,15 +706,9 @@ body {
   height: 4px;
   border-radius: 2px;
   flex-shrink: 0;
-}
-
-/* ── Scrollbar ──────────────────────────────────────────────── */
-::-webkit-scrollbar       { width: 4px; }
+}::-webkit-scrollbar       { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-/* ── Mobile — stack vertically ──────────────────────────────── */
-@media (max-width: 680px) {
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }@media (max-width: 680px) {
   body { overflow: auto; }
 
   .layout {

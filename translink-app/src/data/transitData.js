@@ -43,6 +43,10 @@ export const STATIONS = {
     { id: '22nd-street', name: '22nd Street', stopNo: '50014' },
     { id: 'new-westminster', name: 'New Westminster', stopNo: '50015' },
     { id: 'columbia', name: 'Columbia', stopNo: '50016' },
+    { id: 'sapperton', name: 'Sapperton', stopNo: '50021' },
+    { id: 'braid', name: 'Braid', stopNo: '50022' },
+    { id: 'lougheed-expo', name: 'Lougheed Town Centre', stopNo: '51011' },
+    { id: 'production-way-expo', name: 'Production Way–University', stopNo: '51010' },
     { id: 'scott-road', name: 'Scott Road', stopNo: '50017' },
     { id: 'gateway', name: 'Gateway', stopNo: '50018' },
     { id: 'surrey-central', name: 'Surrey Central', stopNo: '50019' },
@@ -97,4 +101,86 @@ export function getDestinations(lineId, originId) {
 
 export function getStationIndex(lineId, stationId) {
   return STATIONS[lineId]?.findIndex((s) => s.id === stationId) ?? -1;
+}
+
+const EXPO_MAIN_IDS = [
+  'waterfront',
+  'burrard',
+  'granville',
+  'stadium',
+  'main-science',
+  'broadway-city-hall-expo',
+  'nanaimo',
+  '29th-avenue',
+  'joyce',
+  'patterson',
+  'metrotown',
+  'royal-oak',
+  'edmonds',
+  '22nd-street',
+  'new-westminster',
+  'columbia',
+];
+
+const EXPO_SURREY_IDS = ['scott-road', 'gateway', 'surrey-central', 'king-george'];
+
+const EXPO_PWU_IDS = ['sapperton', 'braid', 'lougheed-expo', 'production-way-expo'];
+
+let expoAdjacency = null;
+
+function getExpoAdjacency() {
+  if (expoAdjacency) return expoAdjacency;
+  const adj = new Map();
+  const link = (a, b) => {
+    if (!adj.has(a)) adj.set(a, []);
+    if (!adj.has(b)) adj.set(b, []);
+    adj.get(a).push(b);
+    adj.get(b).push(a);
+  };
+  for (let i = 0; i < EXPO_MAIN_IDS.length - 1; i++) {
+    link(EXPO_MAIN_IDS[i], EXPO_MAIN_IDS[i + 1]);
+  }
+  link('columbia', EXPO_SURREY_IDS[0]);
+  link('columbia', EXPO_PWU_IDS[0]);
+  for (let i = 0; i < EXPO_SURREY_IDS.length - 1; i++) {
+    link(EXPO_SURREY_IDS[i], EXPO_SURREY_IDS[i + 1]);
+  }
+  for (let i = 0; i < EXPO_PWU_IDS.length - 1; i++) {
+    link(EXPO_PWU_IDS[i], EXPO_PWU_IDS[i + 1]);
+  }
+  expoAdjacency = adj;
+  return adj;
+}
+
+function expoShortestPath(originId, destinationId) {
+  const adj = getExpoAdjacency();
+  const visited = new Set([originId]);
+  const queue = [[originId]];
+  while (queue.length) {
+    const path = queue.shift();
+    const cur = path[path.length - 1];
+    if (cur === destinationId) return path;
+    for (const next of adj.get(cur) || []) {
+      if (visited.has(next)) continue;
+      visited.add(next);
+      queue.push([...path, next]);
+    }
+  }
+  return [];
+}
+
+export function getRouteStationIds(lineId, originId, destinationId) {
+  if (!destinationId || originId === destinationId) return [];
+  if (lineId === 'expo') {
+    return expoShortestPath(originId, destinationId);
+  }
+  const stations = STATIONS[lineId];
+  if (!stations) return [];
+  const o = stations.findIndex((s) => s.id === originId);
+  const d = stations.findIndex((s) => s.id === destinationId);
+  if (o === -1 || d === -1) return [];
+  const lo = Math.min(o, d);
+  const hi = Math.max(o, d);
+  const segment = stations.slice(lo, hi + 1);
+  return o <= d ? segment.map((s) => s.id) : segment.map((s) => s.id).reverse();
 }

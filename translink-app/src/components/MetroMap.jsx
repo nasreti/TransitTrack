@@ -8,7 +8,7 @@ import {
   useMap,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { STATIONS } from '../data/transitData.js';
+import { STATIONS, getRouteStationIds } from '../data/transitData.js';
 
 const LL = {
   'waterfront-canada':          [49.2847, -123.1113],
@@ -42,6 +42,10 @@ const LL = {
   '22nd-street':                [49.2043, -122.9718],
   'new-westminster':            [49.2005, -122.9121],
   'columbia':                   [49.2060, -122.9013],
+  'sapperton':                  [49.2248, -122.8895],
+  'braid':                      [49.2336, -122.8830],
+  'lougheed-expo':              [49.2481, -122.8993],
+  'production-way-expo':        [49.2523, -122.9234],
   'scott-road':                 [49.1972, -122.9013],
   'gateway':                    [49.1884, -122.8989],
   'surrey-central':             [49.1891, -122.8456],
@@ -90,6 +94,13 @@ const LINE_PATHS = {
       [49.2148, -122.9803], [49.2043, -122.9718], [49.2005, -122.9121],
       [49.2060, -122.9013], [49.1972, -122.9013], [49.1884, -122.8989],
       [49.1891, -122.8456], [49.1827, -122.8456],
+    ],
+    [
+      [49.2060, -122.9013],
+      [49.2248, -122.8895],
+      [49.2336, -122.8830],
+      [49.2481, -122.8993],
+      [49.2523, -122.9234],
     ],
   ],
   millennium: [
@@ -166,16 +177,8 @@ function MapController({ selectedLine, origin, destination }) {
 function RouteHighlight({ selectedLine, origin, destination }) {
   if (!selectedLine || !origin || !destination) return null;
 
-  const stations = STATIONS[selectedLine.id];
-  const oIdx = stations.findIndex((s) => s.id === origin.id);
-  const dIdx = stations.findIndex((s) => s.id === destination.id);
-  if (oIdx === -1 || dIdx === -1) return null;
-
-  const [lo, hi] = oIdx < dIdx ? [oIdx, dIdx] : [dIdx, oIdx];
-  const coords = stations
-    .slice(lo, hi + 1)
-    .map((s) => LL[s.id])
-    .filter(Boolean);
+  const ids = getRouteStationIds(selectedLine.id, origin.id, destination.id);
+  const coords = ids.map((id) => LL[id]).filter(Boolean);
 
   if (coords.length < 2) return null;
 
@@ -247,7 +250,7 @@ export default function MetroMap({ selectedLine, origin, destination }) {
           const dimmed     = selectedLine && !isSelected;
           const color      = LINE_COLORS[lineId];
 
-          return STATIONS[lineId].map((station) => {
+            return STATIONS[lineId].map((station) => {
             const pos = LL[station.id];
             if (!pos) return null;
             const isOrigin = origin?.id === station.id;
@@ -256,7 +259,7 @@ export default function MetroMap({ selectedLine, origin, destination }) {
 
             return (
               <CircleMarker
-                key={station.id}
+                key={`${lineId}-${station.id}`}
                 center={pos}
                 radius={isSelected ? 5 : 2.5}
                 pathOptions={{

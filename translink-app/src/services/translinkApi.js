@@ -1,4 +1,4 @@
-import { getStationIndex, STATIONS } from '../data/transitData.js';
+import { getRouteStationIds, STATIONS } from '../data/transitData.js';
 
 const API_BASE = 'https://api.translink.ca/rttiapi/v1';
 
@@ -50,10 +50,9 @@ function parseApiResponse(data, lineId, originId, destinationId) {
 }
 
 function estimateTravelTime(lineId, originId, destinationId) {
-  const originIdx = getStationIndex(lineId, originId);
-  const destIdx = getStationIndex(lineId, destinationId);
-  if (originIdx === -1 || destIdx === -1) return null;
-  const stops = Math.abs(destIdx - originIdx);
+  const path = getRouteStationIds(lineId, originId, destinationId);
+  if (path.length < 2) return null;
+  const stops = path.length - 1;
   return stops * 2 + 1;
 }
 
